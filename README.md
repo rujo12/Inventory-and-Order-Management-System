@@ -1,95 +1,236 @@
 # Inventory & Order Management System
 
-A full-stack inventory and order management system 
+A full-stack Inventory & Order Management System built using FastAPI, React, PostgreSQL, Docker, and Docker Compose. The application enables users to manage products, customers, and orders while enforcing inventory validation and maintaining accurate stock levels.
 
 ## Features
-- Product management with unique SKU validation
-- Customer management with unique email validation
-- Order creation with automatic stock reduction
-- Order cancellation/deletion with stock restoration
-- Dashboard summary with low-stock alerts
-- React frontend with responsive UI
-- FastAPI backend
-- PostgreSQL database
-- Docker + Docker Compose setup
 
-## Tech Stack
-- Frontend: React + Vite
-- Backend: FastAPI
-- Database: PostgreSQL
-- Containerization: Docker, Docker Compose
+### Product Management
 
-## Local Development
+* Create products
+* View products
+* Update products
+* Delete products
+* Unique SKU validation
+* Inventory tracking
 
-### Backend
-```bash
-cd backend
-cp .env.example .env
-pip install -r requirements.txt
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-```
+### Customer Management
+
+* Create customers
+* View customers
+* Update customers
+* Delete customers
+* Unique email validation
+
+### Order Management
+
+* Create orders
+* Automatic inventory deduction
+* Order total calculation
+* Inventory validation before order creation
+* Prevention of orders with insufficient stock
+
+### Dashboard
+
+* Total products
+* Total customers
+* Total orders
+* Low-stock monitoring
+* Inventory overview
+
+---
+
+## Business Rules
+
+### Unique Product SKU
+
+Every product must have a unique SKU.
+
+### Unique Customer Email
+
+Every customer must have a unique email address.
+
+### Inventory Validation
+
+Orders cannot be placed if requested quantity exceeds available inventory.
+
+### Automatic Stock Reduction
+
+Successful orders automatically reduce product inventory.
+
+### Atomic Order Processing
+
+Order creation is transaction-safe:
+
+* All items are validated before inventory updates.
+* No partial stock deductions occur.
+* No partial order creation occurs.
+* Orders with insufficient stock are rejected immediately.
+
+---
+
+## Technology Stack
 
 ### Frontend
-```bash
-cd frontend
-cp .env.example .env
-npm install
-npm run dev
+
+* React
+* Vite
+* JavaScript
+
+### Backend
+
+* FastAPI
+* SQLAlchemy
+* Pydantic
+* Uvicorn
+
+### Database
+
+* PostgreSQL
+
+### DevOps
+
+* Docker
+* Docker Compose
+
+### Deployment
+
+* Vercel
+* Render
+* Docker Hub
+
+---
+
+## Project Structure
+
+```text
+Inventory-and-Order-Management-System
+│
+├── backend
+│   ├── app
+│   │   ├── routers
+│   │   ├── models.py
+│   │   ├── schemas.py
+│   │   ├── database.py
+│   │   ├── config.py
+│   │   └── main.py
+│   │
+│   ├── requirements.txt
+│   └── Dockerfile
+│
+├── frontend
+│   ├── src
+│   ├── package.json
+│   └── Dockerfile
+│
+├── docker-compose.yml
+└── README.md
 ```
 
-### Docker Compose
-From the project root:
+---
+
+## Environment Variables
+
+```env
+POSTGRES_USER=inventory_user
+POSTGRES_PASSWORD=change_me
+POSTGRES_DB=inventory_db
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+
+CORS_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
+
+APP_NAME=Inventory & Order Management API
+```
+
+---
+
+## Running Locally
+
+### Start Services
+
 ```bash
 docker compose up --build
 ```
 
-- Frontend: http://localhost:3000
-- Backend: http://localhost:8000
-- API Health: http://localhost:8000/api/health
+### Frontend
+
+```text
+http://localhost:3000
+```
+
+### Backend
+
+```text
+http://localhost:8000
+```
+
+### API Documentation
+
+```text
+http://localhost:8000/docs
+```
+
+### Stop Services
+
+```bash
+docker compose down
+```
+
+---
+
+## Docker
+
+Build and run the complete application:
+
+```bash
+docker compose up --build
+```
+
+Pull backend image:
+
+```bash
+docker pull rushiljoshi12/inventory-backend:latest
+```
+
+---
 
 ## API Endpoints
 
 ### Products
-- `POST /api/products`
-- `GET /api/products`
-- `GET /api/products/{id}`
-- `PUT /api/products/{id}`
-- `DELETE /api/products/{id}`
+
+```http
+GET    /api/products
+POST   /api/products
+PUT    /api/products/{id}
+DELETE /api/products/{id}
+```
 
 ### Customers
-- `POST /api/customers`
-- `GET /api/customers`
-- `GET /api/customers/{id}`
-- `DELETE /api/customers/{id}`
+
+```http
+GET    /api/customers
+POST   /api/customers
+PUT    /api/customers/{id}
+DELETE /api/customers/{id}
+```
 
 ### Orders
-- `POST /api/orders`
-- `GET /api/orders`
-- `GET /api/orders/{id}`
-- `DELETE /api/orders/{id}`
+
+```http
+GET    /api/orders
+POST   /api/orders
+```
 
 ### Dashboard
-- `GET /api/dashboard/summary`
 
-## Business Rules
-- SKU must be unique
-- Customer email must be unique
-- Quantity in stock cannot be negative
-- Orders cannot be created if stock is insufficient
-- Stock is reduced automatically when an order is placed
-- Total amount is calculated automatically by the backend
+```http
+GET /api/dashboard
+```
 
-## Deployment
-Use:
-- Backend: Render / Railway / Fly.io
-- Frontend: Vercel / Netlify
-- Database: Neon / Supabase / Railway Postgres
+### Health Check
 
-Set environment variables in each platform and point the frontend to the deployed backend API URL.
+```http
+GET /api/health
+```
 
-## Submission
-Add your:
-- GitHub repository URL
-- Docker Hub image URL
-- Live frontend URL
-- Live backend URL
+---
